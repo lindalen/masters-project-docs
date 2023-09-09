@@ -1,4 +1,4 @@
-# Masters-Project
+# Masters Project
 
 ## Overview
 Proof-of-Concept Medical Chatbot: A Flask and React-based application that uses a fine-tuned language model to provide real-time medical advice.
