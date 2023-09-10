@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import './App.css'
+import DarkModeToggle from './components/DarkModeToggle'
+import MessageList from './components/MessageList'
+import MessageInput from './components/MessageInput'
 
 function App() {
   const [messages, setMessages] = useState([])
@@ -12,25 +14,15 @@ function App() {
   }
 
   return (
-    <div className="p-4">
-      <div className="mb-4">
-        {messages.map((message, index) => (
-          <div key={index} className="border p-2 mb-2">
-            {message}
-          </div>
-        ))}
+    <div className="flex flex-col justify-center items-center h-screen w-screen bg-gray-100 dark:bg-gray-900">
+      <div className="flex flex-col h-4/5 w-1/2 p-4 rounded-lg shadow-lg dark:bg-gray-800 border border-gray-300 dark:border-gray-500">
+        <div className="flex items-center justify-between text-gray-800 dark:text-gray-100 mb-4">
+          <div className="text-xl font-bold">MediBot</div>
+          <DarkModeToggle/>
+        </div>
+        <MessageList messages={messages} />
+        <MessageInput input={input} setInput={setInput} handleSubmit={handleSubmit} />
       </div>
-      <form onSubmit={handleSubmit} className="flex">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          className="flex-grow border p-2"
-        />
-        <button type="submit" className="ml-2 p-2 border">
-          Submit
-        </button>
-      </form>
     </div>
   )
 }
