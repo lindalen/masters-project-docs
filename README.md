@@ -3,6 +3,9 @@
 ## Overview
 Proof-of-Concept Medical Chatbot: A Flask and React-based application that uses a fine-tuned language model to provide real-time medical advice.
 
+![image](https://github.com/lindalen/masters-project/assets/43276209/e85ef3c3-7b27-4085-8022-49e582312e4f)
+
+
 ## Objective
 To serve as a digital twin for preventive healthcare.
 
