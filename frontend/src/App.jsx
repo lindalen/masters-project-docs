@@ -14,12 +14,18 @@ function App() {
     setInput('');
   
     try {
-      const response = await fetch('/api/hello');
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ input_text: input })
+      });
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      const data = await response.text();
-      setMessages((prevMessages) => [...prevMessages, data]);
+      const data = await response.json();
+      setMessages((prevMessages) => [...prevMessages, data.response]);
     } catch (error) {
       console.error('Fetch Error:', error);
       setMessages((prevMessages) => [...prevMessages, 'Network error. Try again.']);
