@@ -7,11 +7,24 @@ function App() {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
 
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    setMessages([...messages, input])
-    setInput('')
-  }
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+  
+    setMessages((prevMessages) => [...prevMessages, input]);
+    setInput('');
+  
+    try {
+      const response = await fetch('/api/hello');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.text();
+      setMessages((prevMessages) => [...prevMessages, data]);
+    } catch (error) {
+      console.error('Fetch Error:', error);
+      setMessages((prevMessages) => [...prevMessages, 'Network error. Try again.']);
+    }
+  };
 
   return (
     <div className="flex flex-col justify-center items-center h-screen w-screen bg-gray-100 dark:bg-gray-900">
