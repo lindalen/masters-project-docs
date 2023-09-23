@@ -5,7 +5,7 @@ MAX_TOKENS = 1024
 
 # Initialize the model and tokenizer
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
-model = GPT2LMHeadModel.from_pretrained("gpt2")
+model = GPT2LMHeadModel.from_pretrained('./models/output/checkpoint-1800/', local_files_only=True)
 
 tokenizer.pad_token = tokenizer.eos_token
 
@@ -38,7 +38,7 @@ def trim_conversation_to_fit(input_text, conversation):
     return trimmed_conversation
 
 def get_template(input_text):
-    return "You are MediBot. Respond concisely: "
+    return "You are MediBot. Respond concisely with medical advice: "
 
 def preprocess_input(input_text, template):
     """Prepares the input for the model.
@@ -97,7 +97,7 @@ def generate_response(input_text):
         add_special_tokens=True 
     )
 
-    desired_response_length = inputs['input_ids'].shape[1] + 100
+    desired_response_length = inputs['input_ids'].shape[1] + 75
 
     outputs = model.generate(
         input_ids=inputs['input_ids'], 
@@ -112,8 +112,8 @@ def generate_response(input_text):
 
     postprocessed_output = postprocess_output(outputs, input_text, template)
 
-    conversation_history.append(f"User: {input_text}")
-    conversation_history.append(f"MediBot: {postprocessed_output}")
+    conversation_history.append(f"[PATIENT]: {input_text}")
+    conversation_history.append(f"[DOCTOR]: {postprocessed_output}")
     
     return postprocessed_output
 
