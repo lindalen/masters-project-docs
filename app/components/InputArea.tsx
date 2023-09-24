@@ -31,8 +31,8 @@ const ChatInput: React.FC<ChatInputProps> = ({ onUserInput, onSubmit, input }) =
       flexDirection="row"
       alignItems="center"
       paddingHorizontal="m"
+      paddingVertical="l"
       gap="s"
-      height="10%"
       width="100%"
       backgroundColor="bgSecondary"
     >

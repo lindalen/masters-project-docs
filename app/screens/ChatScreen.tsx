@@ -53,7 +53,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
   };
 
   return (
-    <Box flex={1} backgroundColor="bgPrimary" maxHeight="100%">
+    <Box flex={1} maxHeight="92.5%" backgroundColor="bgPrimary">
       <Header isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} onReset={onReset} />
       <MessageList messages={messages} />
       <ChatInput onSubmit={onChatSubmit} onUserInput={onUserInput} input={input} />

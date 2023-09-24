@@ -3,7 +3,9 @@ import { createBox, createText, ThemeProvider } from "@shopify/restyle";
 import ChatScreen from "./screens/ChatScreen";
 import { darkTheme, theme, Theme } from "./theme";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { Dimensions } from "react-native";
 
+const screenHeight = Dimensions.get("window").height;
 const Box = createBox<Theme>();
 const Text = createText<Theme>();
 
@@ -13,7 +15,7 @@ export default function App() {
 
   return (
     <ThemeProvider theme={currentTheme}>
-      <Box flex={1}>
+      <Box height={screenHeight} flex={1}>
         <ChatScreen isDarkMode={isDarkMode} toggleDarkMode={() => setIsDarkMode(!isDarkMode)} />
         <Box height="7.5%" flexDirection="row" backgroundColor="primary" alignItems="center">
           <Box flex={1} height="100%" justifyContent="center" alignItems="center">
