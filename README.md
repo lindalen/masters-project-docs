@@ -3,15 +3,14 @@
 ## Overview
 Proof-of-Concept Medical Chatbot: A Flask and React-based application that uses a fine-tuned language model to provide real-time medical advice.
 
-![image](https://github.com/lindalen/masters-project/assets/43276209/e85ef3c3-7b27-4085-8022-49e582312e4f)
-
+![image](https://github.com/lindalen/masters-project/assets/43276209/a7788795-bebe-46c4-880b-c0d5bbb12299)
 
 ## Objective
 To serve as a digital twin for preventive healthcare.
 
 ## Tech Stack
 - Backend: Flask (Python)
-- Frontend: React (JavaScript)
+- Frontend: React Native + Restyle
 - AI Model: Fine-tuned language model
 
 ## Setup
@@ -22,13 +21,9 @@ To serve as a digital twin for preventive healthcare.
 3. Run app: `flask run`
 
 ### Frontend
-1. Navigate to `/frontend`
+1. Navigate to `/app`
 2. Install dependencies: `npm install`
-3. Run app: `npm start`
-
-## Usage
-1. Open browser: `http://127.0.0.1:5000/`
-2. Interact with the chatbot.
+3. Run app: `npx expo start --web`
 
 ## License
 MIT
