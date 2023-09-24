@@ -2,6 +2,7 @@ import { createBox, createText } from "@shopify/restyle";
 import React from "react";
 import { Theme } from "../theme";
 import { GestureResponderEvent, TouchableOpacity } from "react-native";
+import { proxyUrl } from "../utils";
 
 const Text = createText<Theme>();
 const Box = createBox<Theme>();
@@ -15,7 +16,7 @@ const ResetButton = ({ onReset }: ResetButtonProps) => {
     event.preventDefault();
 
     try {
-      const response = await fetch("/api/reset", {
+      const response = await fetch(`${proxyUrl}/api/reset`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

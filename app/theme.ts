@@ -2,23 +2,30 @@
 import { createTheme } from "@shopify/restyle";
 
 export const colors = {
-  primary: "#007BFF",
-  secondary: "#6C757D",
-  textPrimary: "#212529",
-  textSecondary: "#FFFFFF",
-  cardPrimary: "#343A40",
-  cardSecondary: "#F8F9FA",
+  primary: "#22c55e",
+  secondary: "#ec4899",
+
+  bgLightPrimary: "#f8fafc",
+  bgLightSecondary: "#e2e8f0",
+
+  bgDarkPrimary: "#1e293b",
+  bgDarkSecondary: "#334155",
+
+  textLight: "#f8fafc",
+  textDark: "#020617",
+  textDim: "#94a3b8",
 };
 
 const theme = createTheme({
   colors: {
-    bgMain: colors.cardSecondary,
-    fgMain: colors.textPrimary,
-
-    cardPrimary: colors.cardPrimary,
-    cardSecondary: colors.cardSecondary,
-    textPrimary: colors.textPrimary,
-    textSecondary: colors.textSecondary,
+    primary: colors.primary,
+    secondary: colors.secondary,
+    bgPrimary: colors.bgLightPrimary,
+    bgSecondary: colors.bgLightSecondary,
+    textPrimary: colors.textDark,
+    textSecondary: colors.textLight,
+    textLight: colors.textLight,
+    textDim: colors.textDim,
   },
   spacing: {
     xs: 4,
@@ -29,6 +36,10 @@ const theme = createTheme({
   },
   textVariants: {
     defaults: {},
+    primary: {
+      fontSize: 16,
+      color: "textLight",
+    },
     header: {
       fontSize: 24,
       color: "textPrimary",
@@ -50,13 +61,10 @@ const darkTheme: Theme = {
   ...theme,
   colors: {
     ...theme.colors,
-    bgMain: colors.cardPrimary,
-    fgMain: colors.textSecondary,
-
-    cardPrimary: colors.cardSecondary,
-    cardSecondary: colors.cardPrimary,
-    textPrimary: colors.textSecondary,
-    textSecondary: colors.textPrimary,
+    bgPrimary: colors.bgDarkPrimary,
+    bgSecondary: colors.bgDarkSecondary,
+    textPrimary: colors.textLight,
+    textSecondary: colors.textDark,
   },
 };
 

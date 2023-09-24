@@ -13,14 +13,12 @@ interface HeaderProps {
   onReset: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({
-  isDarkMode,
-  toggleDarkMode,
-  onReset,
-}) => {
+const Header: React.FC<HeaderProps> = ({ isDarkMode, toggleDarkMode, onReset }) => {
   return (
-    <Box flexDirection="row" justifyContent="space-between" alignItems="center">
-      <Text variant="header">MediBot</Text>
+    <Box flexDirection="row" justifyContent="space-between" alignItems="center" padding="m">
+      <Text color="textPrimary" fontSize={24}>
+        MediBot
+      </Text>
       <Box flexDirection="row" gap="m">
         <Switch value={isDarkMode} onValueChange={toggleDarkMode} />
         <ResetButton onReset={onReset} />

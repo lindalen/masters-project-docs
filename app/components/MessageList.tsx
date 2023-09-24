@@ -11,21 +11,17 @@ interface MessageListProps {
 
 const MessageList: React.FC<MessageListProps> = ({ messages }) => {
   return (
-    <Box flex={0.75}>
+    <Box flex={1} paddingHorizontal="m" overflow="scroll">
       {messages.map((message, index) => {
         const isUserMessage = index % 2 === 0;
 
         return (
-          <Box
-            key={index}
-            flexDirection="row"
-            justifyContent={isUserMessage ? "flex-start" : "flex-end"}
-          >
+          <Box key={index} flexDirection="row" justifyContent={isUserMessage ? "flex-start" : "flex-end"}>
             <Box
-              backgroundColor="cardPrimary"
+              backgroundColor={isUserMessage ? "bgSecondary" : "bgSecondary"}
               padding="m"
-              margin="m"
-              maxWidth="50%"
+              marginBottom="m"
+              width="50%"
             >
               <Box>
                 <Text variant="body">{isUserMessage ? "You" : "MediBot"}</Text>

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
 import MessageList from "../components/MessageList";
-import InputArea from "../components/InputArea";
+import ChatInput from "../components/InputArea";
 import { createBox } from "@shopify/restyle";
 import { Theme } from "../theme";
 import { GestureResponderEvent } from "react-native";
+import { proxyUrl } from "../utils";
 
 const Box = createBox<Theme>();
 
@@ -13,10 +14,7 @@ interface ChatScreenProps {
   toggleDarkMode: () => void;
 }
 
-const ChatScreen: React.FC<ChatScreenProps> = ({
-  isDarkMode,
-  toggleDarkMode,
-}) => {
+const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) => {
   const [messages, setMessages] = useState<string[]>([]);
   const [input, setInput] = useState<string>("");
 
@@ -27,7 +25,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
     setInput("");
 
     try {
-      const response = await fetch("/api/chat", {
+      const response = await fetch(`${proxyUrl}/api/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -41,10 +39,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
       setMessages((prevMessages) => [...prevMessages, data.response]);
     } catch (error) {
       console.error("Fetch Error:", error);
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        "Network error. Try again.",
-      ]);
+      setMessages((prevMessages) => [...prevMessages, "Network error. Try again."]);
     }
   };
 
@@ -58,14 +53,10 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
   };
 
   return (
-    <Box flex={1} padding="m" backgroundColor="bgMain">
-      <Header isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+    <Box flex={1} backgroundColor="bgPrimary" maxHeight="100%">
+      <Header isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} onReset={onReset} />
       <MessageList messages={messages} />
-      <InputArea
-        onSubmit={onChatSubmit}
-        onUserInput={onUserInput}
-        input={input}
-      />
+      <ChatInput onSubmit={onChatSubmit} onUserInput={onUserInput} input={input} />
     </Box>
   );
 };

@@ -1,40 +1,72 @@
 import React, { useState } from "react";
-import { Theme } from "../theme";
-import { createBox, createText } from "@shopify/restyle";
+import { Theme, theme } from "../theme";
+import { createBox, createText, useTheme } from "@shopify/restyle";
 import {
   GestureResponderEvent,
+  NativeSyntheticEvent,
   TextInput,
+  TextInputSubmitEditingEventData,
   TouchableOpacity,
 } from "react-native";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 const Box = createBox<Theme>();
 const Text = createText<Theme>();
 
-interface InputAreaProps {
+interface ChatInputProps {
   onUserInput: (input: string) => void;
   onSubmit: (event: GestureResponderEvent) => void;
   input: string;
 }
 
-const InputArea: React.FC<InputAreaProps> = ({
-  onUserInput,
-  onSubmit,
-  input,
-}) => {
+const ChatInput: React.FC<ChatInputProps> = ({ onUserInput, onSubmit, input }) => {
+  const theme = useTheme();
+
+  const onSubmitEditing = (event: any) => {
+    onSubmit(event);
+  };
+
   return (
-    <Box flexDirection="row" alignItems="center">
+    <Box
+      flexDirection="row"
+      alignItems="center"
+      paddingHorizontal="m"
+      gap="s"
+      height="10%"
+      width="100%"
+      backgroundColor="bgSecondary"
+    >
       <TextInput
-        style={{ flex: 1, height: 40, borderColor: "gray", borderWidth: 1 }}
+        style={{
+          flex: 1,
+          height: 40,
+          borderRadius: theme.spacing.s,
+          paddingHorizontal: theme.spacing.s,
+          backgroundColor: theme.colors.bgPrimary,
+          color: theme.colors.textPrimary,
+        }}
+        placeholderTextColor={theme.colors.textDim}
         onChangeText={onUserInput}
         value={input}
+        placeholder="Send a message..."
+        onSubmitEditing={onSubmitEditing}
       />
-      <TouchableOpacity onPress={onSubmit}>
-        <Box padding="m">
-          <Text variant="body">Submit</Text>
+      <TouchableOpacity onPress={onSubmitEditing}>
+        <Box
+          padding="s"
+          justifyContent="center"
+          alignItems="center"
+          backgroundColor="primary"
+          style={{
+            borderRadius: theme.spacing.s,
+            height: 40,
+          }}
+        >
+          <FontAwesome name="arrow-right" size={20} color={theme.colors.textLight} />
         </Box>
       </TouchableOpacity>
     </Box>
   );
 };
 
-export default InputArea;
+export default ChatInput;
