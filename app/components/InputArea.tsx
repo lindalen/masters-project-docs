@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import RecordVoiceButton from "./RecordVoiceButton";
 
 const Box = createBox<Theme>();
 const Text = createText<Theme>();
@@ -58,13 +59,14 @@ const ChatInput: React.FC<ChatInputProps> = ({ onUserInput, onSubmit, input }) =
           alignItems="center"
           backgroundColor="primary"
           style={{
-            borderRadius: theme.spacing.s,
-            height: 40,
+            borderRadius: theme.spacing.m,
+            height: 30,
           }}
         >
-          <FontAwesome name="arrow-right" size={20} color={theme.colors.textLight} />
+          <FontAwesome name="arrow-up" size={15} color={theme.colors.textLight} />
         </Box>
       </TouchableOpacity>
+      <RecordVoiceButton onUserInput={onUserInput} />
     </Box>
   );
 };

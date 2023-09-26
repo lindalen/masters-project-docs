@@ -3,3 +3,4 @@ flask_cors
 transformers
 transformers[torch]
 datasets
+scipy

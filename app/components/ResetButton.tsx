@@ -1,8 +1,9 @@
 import { createBox, createText } from "@shopify/restyle";
-import React from "react";
-import { Theme } from "../theme";
+import React, { useEffect } from "react";
+import { Theme, theme } from "../theme";
 import { GestureResponderEvent, TouchableOpacity } from "react-native";
 import { proxyUrl } from "../utils";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 const Text = createText<Theme>();
 const Box = createBox<Theme>();
@@ -33,11 +34,9 @@ const ResetButton = ({ onReset }: ResetButtonProps) => {
   };
 
   return (
-    <TouchableOpacity onPress={reset}>
-      <Box>
-        <Text color="textPrimary">Reset</Text>
-      </Box>
-    </TouchableOpacity>
+    <FontAwesome.Button name="rotate-left" onPress={reset} color="white" backgroundColor={theme.colors.primary}>
+      Reset
+    </FontAwesome.Button>
   );
 };
 
