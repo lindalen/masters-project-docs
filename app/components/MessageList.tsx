@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Theme, theme } from "../theme";
 import { createBox, createText } from "@shopify/restyle";
-import { ScrollView, View } from "react-native";
+import { Keyboard, ScrollView, View } from "react-native";
 
 const Box = createBox<Theme>();
 const Text = createText<Theme>();
@@ -14,8 +14,26 @@ const MessageList: React.FC<MessageListProps> = ({ messages }) => {
   const scrollViewRef = useRef<ScrollView>(null);
 
   useEffect(() => {
-    scrollViewRef.current?.scrollToEnd({ animated: true });
+    const timer = setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, [messages]);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", () =>
+      scrollViewRef.current?.scrollToEnd({ animated: true })
+    );
+    const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () =>
+      scrollViewRef.current?.scrollToEnd({ animated: true })
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
 
   return (
     <Box flex={1}>

@@ -4,3 +4,5 @@ transformers
 transformers[torch]
 datasets
 scipy
+openai-whisper
+temp

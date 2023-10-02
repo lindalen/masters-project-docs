@@ -5,6 +5,7 @@ from services import model_service, transcribe_service
 def set_routes(app):
     @app.route("/api/chat", methods=["POST"])
     def generate():
+        print("Received something")
         data = request.get_json()
         input_text = data.get("input_text")
         response = model_service.generate_response(input_text)
@@ -18,7 +19,7 @@ def set_routes(app):
     @app.route("/api/transcribe", methods=["POST"])
     def transcribe():
         data_length = request.content_length
-        print("Data Length:", data_length)
+        print("Data Length:", data_length, "GB:", data_length / 1024 / 1024)
 
         audio_bytes = request.get_data()
         if not audio_bytes:

@@ -1,18 +1,11 @@
-import React, { useState } from "react";
-import { Theme, theme } from "../theme";
+import React from "react";
+import { Theme } from "../theme";
 import { createBox, createText, useTheme } from "@shopify/restyle";
-import {
-  GestureResponderEvent,
-  NativeSyntheticEvent,
-  TextInput,
-  TextInputSubmitEditingEventData,
-  TouchableOpacity,
-} from "react-native";
+import { GestureResponderEvent, TextInput, TouchableOpacity } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import RecordVoiceButton from "./RecordVoiceButton";
 
 const Box = createBox<Theme>();
-const Text = createText<Theme>();
 
 interface ChatInputProps {
   onUserInput: (input: string) => void;

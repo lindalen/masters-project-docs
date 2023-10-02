@@ -18,7 +18,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, toggleDarkMode, onReset }) 
   const theme = useTheme();
 
   return (
-    <Box flexDirection="row" justifyContent="space-between" alignItems="center" padding="m">
+    <Box flexDirection="row" justifyContent="space-between" alignItems="center" padding="m" paddingTop="l">
       <Text color="textPrimary" fontSize={24}>
         MediBot
       </Text>

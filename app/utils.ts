@@ -1,1 +1,1 @@
-export const proxyUrl = "http://localhost:5000";
+export const proxyUrl = "http://192.168.0.124:5000";

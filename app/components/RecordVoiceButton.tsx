@@ -65,7 +65,7 @@ const RecordVoiceButton = ({ onUserInput }: RecordVoiceButtonProps) => {
     setIsLoading(true);
 
     try {
-      const response = await FileSystem.uploadAsync(`http://192.168.0.124:5000/api/transcribe`, uri);
+      const response = await FileSystem.uploadAsync(`${proxyUrl}/api/transcribe`, uri);
 
       if (response.status == 200) {
         console.log("Success!");
@@ -85,7 +85,7 @@ const RecordVoiceButton = ({ onUserInput }: RecordVoiceButtonProps) => {
       {isLoading ? (
         <ActivityIndicator size={20} color="white" />
       ) : (
-        <FontAwesome name="microphone" size={20} color={isRecording ? "blue" : "white"} />
+        <FontAwesome name="microphone" size={40} color={isRecording ? "blue" : "white"} />
       )}
     </TouchableOpacity>
   );

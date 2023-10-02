@@ -4,7 +4,7 @@ import MessageList from "../components/MessageList";
 import ChatInput from "../components/InputArea";
 import { createBox } from "@shopify/restyle";
 import { Theme } from "../theme";
-import { GestureResponderEvent } from "react-native";
+import { GestureResponderEvent, KeyboardAvoidingView } from "react-native";
 import { proxyUrl } from "../utils";
 
 const Box = createBox<Theme>();
@@ -18,19 +18,23 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
   const [messages, setMessages] = useState<string[]>([]);
   const [input, setInput] = useState<string>("");
 
-  const onChatSubmit = async (event: GestureResponderEvent) => {
+  const onChatSubmit = (event: GestureResponderEvent) => {
     event.preventDefault();
 
     setMessages((prevMessages) => [...prevMessages, input]);
     setInput("");
 
+    sendRequest(input);
+  };
+
+  const sendRequest = async (userInput: string) => {
     try {
       const response = await fetch(`${proxyUrl}/api/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ input_text: input }),
+        body: JSON.stringify({ input_text: userInput }),
       });
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -53,11 +57,13 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
   };
 
   return (
-    <Box flex={1} maxHeight="92.5%" backgroundColor="bgPrimary">
-      <Header isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} onReset={onReset} />
-      <MessageList messages={messages} />
-      <ChatInput onSubmit={onChatSubmit} onUserInput={onUserInput} input={input} />
-    </Box>
+    <KeyboardAvoidingView behavior="padding" style={{ maxHeight: "92.5%", flex: 1 }}>
+      <Box flex={1} backgroundColor="bgPrimary">
+        <Header isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} onReset={onReset} />
+        <MessageList messages={messages} />
+        <ChatInput onSubmit={onChatSubmit} onUserInput={onUserInput} input={input} />
+      </Box>
+    </KeyboardAvoidingView>
   );
 };
 
