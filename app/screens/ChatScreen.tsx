@@ -14,36 +14,43 @@ interface ChatScreenProps {
   toggleDarkMode: () => void;
 }
 
-const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) => {
-  const [messages, setMessages] = useState<string[]>([]);
-  const [input, setInput] = useState<string>("");
+export type ChatMessage = {
+  role: string;
+  content: string;
+};
 
-  const onChatSubmit = (event: GestureResponderEvent) => {
+class NetworkError extends Error {}
+class RequestError extends Error {}
+
+const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) => {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [input, setInput] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+
+  const onChatSubmit = async (event: GestureResponderEvent) => {
     event.preventDefault();
 
-    setMessages((prevMessages) => [...prevMessages, input]);
+    const chatMessage = { role: "user", content: input };
+    setMessages((prevMessages) => [...prevMessages, chatMessage]);
     setInput("");
 
-    sendRequest(input);
-  };
-
-  const sendRequest = async (userInput: string) => {
     try {
       const response = await fetch(`${proxyUrl}/api/chat`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ input_text: userInput }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify([...messages, chatMessage]),
       });
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+
+      if (!response.ok) throw new RequestError("Request failed");
+
       const data = await response.json();
-      setMessages((prevMessages) => [...prevMessages, data.response]);
+      setMessages((prevMessages) => [...prevMessages, { role: "assistant", content: data.response }]);
     } catch (error) {
-      console.error("Fetch Error:", error);
-      setMessages((prevMessages) => [...prevMessages, "Network error. Try again."]);
+      if (error instanceof NetworkError) {
+        setError("Unable to reach the server. Try again.");
+      } else if (error instanceof RequestError) {
+        setError("There was a problem with the request. Try again.");
+      }
     }
   };
 
