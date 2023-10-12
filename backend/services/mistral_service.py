@@ -17,6 +17,17 @@ model = AutoModelForCausalLM.from_pretrained(
 
 tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, use_fast=True)
 
+SYSTEM_PROMPT = "You are a helpful assistant, specializing in medical advice. Ensure clarity and accuracy in your responses."
+
+
+def inject_system_prompt(message_history):
+    prefix = "<|im_start|>"
+    suffix = "<|im_end|>\n"
+    sys_prompt = prefix + "System:\n" + SYSTEM_PROMPT + suffix
+    user_prompt = prefix + "User:\n" + message_history[-1]["content"] + suffix
+    message_history[-1]["content"] = sys_prompt + user_prompt + "\n Assistant:"
+    return message_history
+
 
 def extract_last_response(text):
     last_inst_index = text.rfind("[/INST]")
@@ -27,6 +38,7 @@ def extract_last_response(text):
 
 
 def generate_response(message_history):
+    message_history = inject_system_prompt(message_history)
     encodeds = tokenizer.apply_chat_template(message_history, return_tensors="pt")
     model_inputs = encodeds.to(device)
     output = model.generate(

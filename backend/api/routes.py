@@ -6,7 +6,7 @@ def set_routes(app):
     @app.route("/api/chat", methods=["POST"])
     def generate():
         data = request.get_json()
-        print(data)
+        print(data, type(data))
         response = mistral_service.generate_response(data)
         print("Response:", response)
         return jsonify({"response": response})
