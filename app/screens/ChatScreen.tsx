@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import MessageList from "../components/MessageList";
 import ChatInput from "../components/InputArea";
@@ -6,6 +6,7 @@ import { createBox } from "@shopify/restyle";
 import { Theme } from "../theme";
 import { GestureResponderEvent, KeyboardAvoidingView } from "react-native";
 import { proxyUrl } from "../utils";
+import io, { Socket } from "socket.io-client";
 
 const Box = createBox<Theme>();
 
@@ -26,6 +27,8 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [currentToken, setCurrentToken] = useState("");
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   const onChatSubmit = async (event: GestureResponderEvent) => {
     event.preventDefault();
@@ -35,16 +38,13 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
     setInput("");
 
     try {
-      const response = await fetch(`${proxyUrl}/api/chat`, {
+      const response = await fetch(`${proxyUrl}/api/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify([...messages, chatMessage]),
       });
 
       if (!response.ok) throw new RequestError("Request failed");
-
-      const data = await response.json();
-      setMessages((prevMessages) => [...prevMessages, { role: "assistant", content: data.response }]);
     } catch (error) {
       if (error instanceof NetworkError) {
         setError("Unable to reach the server. Try again.");
@@ -52,6 +52,23 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
         setError("There was a problem with the request. Try again.");
       }
     }
+  };
+
+  const onTokenReceived = (token: string) => {
+    setCurrentToken((prev) => prev + token);
+    setMessages((prevMessages) => {
+      if (prevMessages.length === 0 || prevMessages[prevMessages.length - 1].role !== "assistant") {
+        return [...prevMessages, { role: "assistant", content: token }];
+      }
+
+      const messagesExceptLast = prevMessages.slice(0, -1);
+      const updatedLastMessage = {
+        ...prevMessages[prevMessages.length - 1],
+        content: prevMessages[prevMessages.length - 1].content + token,
+      };
+
+      return [...messagesExceptLast, updatedLastMessage];
+    });
   };
 
   const onUserInput = (text: string) => {
@@ -62,6 +79,38 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
     setInput("");
     setMessages([]);
   };
+
+  useEffect(() => {
+    const socketInstance = io(proxyUrl);
+    setSocket(socketInstance);
+
+    return () => {
+      socketInstance.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("new_token", (data) => {
+        if (data.token.includes("[INST]")) {
+          setMessages((prevMessages) => [...prevMessages, { role: "assistant", content: "" }]);
+          return;
+        }
+        onTokenReceived(data.token);
+      });
+
+      socket.on("generation_end", () => {
+        console.log(currentToken.trim());
+      });
+    }
+
+    return () => {
+      if (socket) {
+        socket.off("new_token");
+        socket.off("generation_end");
+      }
+    };
+  }, [socket]);
 
   return (
     <KeyboardAvoidingView behavior="padding" style={{ maxHeight: "92.5%", flex: 1 }}>

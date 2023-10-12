@@ -1,54 +1,58 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer
-import re
+from threading import Thread
 
 
-device = "cuda"  # the device to load the model onto
+class MistralService:
+    SYSTEM_PROMPT = "You are a helpful assistant, specializing in medical advice. Ensure clarity and accuracy in your responses."
 
+    def __init__(self, socketio):
+        self.socketio = socketio
+        self.device = "cuda"
+        self.model_name_or_path = "TheBloke/Mistral-7B-Instruct-v0.1-GPTQ"
+        self.model = AutoModelForCausalLM.from_pretrained(
+            self.model_name_or_path,
+            device_map="auto",
+            trust_remote_code=False,
+            revision="gptq-4bit-32g-actorder_True",
+        ).cuda()
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            self.model_name_or_path, use_fast=True
+        )
 
-model_name_or_path = "TheBloke/Mistral-7B-Instruct-v0.1-GPTQ"
-# To use a different branch, change revision
-# For example: revision="gptq-4bit-32g-actorder_True"
-model = AutoModelForCausalLM.from_pretrained(
-    model_name_or_path,
-    device_map="auto",
-    trust_remote_code=False,
-    revision="gptq-4bit-32g-actorder_True",
-).cuda()
+    def inject_system_prompt(self, message_history):
+        prefix = ""
+        suffix = "\n"
+        sys_prompt = prefix + "System:\n" + self.SYSTEM_PROMPT + suffix
+        user_prompt = prefix + "User:\n" + message_history[-1]["content"] + suffix
+        message_history[-1]["content"] = sys_prompt + user_prompt + "\n Assistant:"
+        return message_history
 
-tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, use_fast=True)
+    def extract_last_response(self, text):
+        last_inst_index = text.rfind("[/INST]")
+        if last_inst_index != -1:
+            response_text = text[last_inst_index + len("[/INST]") : text.rfind("</s>")]
+            return response_text.strip()
+        return ""
 
-SYSTEM_PROMPT = "You are a helpful assistant, specializing in medical advice. Ensure clarity and accuracy in your responses."
+    def stream_response(self, message_history, streamer):
+        message_history = self.inject_system_prompt(message_history)
+        encodeds = self.tokenizer.apply_chat_template(
+            message_history, return_tensors="pt"
+        )
+        model_inputs = encodeds.to(self.device)
 
+        generate_kwargs = dict(
+            inputs=model_inputs,
+            max_new_tokens=512,
+            do_sample=True,
+            top_p=0.95,
+            top_k=40,
+            temperature=0.7,
+            streamer=streamer,
+        )
 
-def inject_system_prompt(message_history):
-    prefix = "<|im_start|>"
-    suffix = "<|im_end|>\n"
-    sys_prompt = prefix + "System:\n" + SYSTEM_PROMPT + suffix
-    user_prompt = prefix + "User:\n" + message_history[-1]["content"] + suffix
-    message_history[-1]["content"] = sys_prompt + user_prompt + "\n Assistant:"
-    return message_history
+        t = Thread(target=self.model.generate, kwargs=generate_kwargs)
+        t.start()
 
-
-def extract_last_response(text):
-    last_inst_index = text.rfind("[/INST]")
-    if last_inst_index != -1:
-        response_text = text[last_inst_index + len("[/INST]") : text.rfind("</s>")]
-        return response_text.strip()
-    return ""
-
-
-def generate_response(message_history):
-    message_history = inject_system_prompt(message_history)
-    encodeds = tokenizer.apply_chat_template(message_history, return_tensors="pt")
-    model_inputs = encodeds.to(device)
-    output = model.generate(
-        inputs=model_inputs,
-        temperature=0.7,
-        do_sample=True,
-        top_p=0.95,
-        top_k=40,
-        max_new_tokens=512,
-    )
-    generated_ids = model.generate(model_inputs, max_new_tokens=1000, do_sample=True)
-    decoded = tokenizer.batch_decode(generated_ids)
-    return extract_last_response(decoded[0])
+        for new_text in streamer:
+            self.socketio.emit("new_token", {"token": new_text})
