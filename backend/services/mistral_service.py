@@ -1,4 +1,4 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer, TextIteratorStreamer
 from threading import Thread
 
 
@@ -18,6 +18,9 @@ class MistralService:
         self.tokenizer = AutoTokenizer.from_pretrained(
             self.model_name_or_path, use_fast=True
         )
+        self.streamer = TextIteratorStreamer(
+            self.tokenizer, timeout=20.0, skip_prompt=True, skip_special_tokens=True
+        )
 
     def inject_system_prompt(self, message_history):
         prefix = ""
@@ -27,14 +30,7 @@ class MistralService:
         message_history[-1]["content"] = sys_prompt + user_prompt + "\n Assistant:"
         return message_history
 
-    def extract_last_response(self, text):
-        last_inst_index = text.rfind("[/INST]")
-        if last_inst_index != -1:
-            response_text = text[last_inst_index + len("[/INST]") : text.rfind("</s>")]
-            return response_text.strip()
-        return ""
-
-    def stream_response(self, message_history, streamer):
+    def stream_response(self, message_history):
         message_history = self.inject_system_prompt(message_history)
         encodeds = self.tokenizer.apply_chat_template(
             message_history, return_tensors="pt"
@@ -48,11 +44,11 @@ class MistralService:
             top_p=0.95,
             top_k=40,
             temperature=0.7,
-            streamer=streamer,
+            streamer=self.streamer,
         )
 
         t = Thread(target=self.model.generate, kwargs=generate_kwargs)
         t.start()
 
-        for new_text in streamer:
+        for new_text in self.streamer:
             self.socketio.emit("new_token", {"token": new_text})
