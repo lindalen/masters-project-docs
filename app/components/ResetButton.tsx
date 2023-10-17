@@ -13,28 +13,8 @@ type ResetButtonProps = {
 };
 
 const ResetButton = ({ onReset }: ResetButtonProps) => {
-  const reset = async (event: GestureResponderEvent) => {
-    event.preventDefault();
-
-    try {
-      const response = await fetch(`${proxyUrl}/api/reset`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error();
-      }
-      const data = await response.json();
-      onReset();
-    } catch (error) {
-      console.error("Reset Error:", error);
-    }
-  };
-
   return (
-    <FontAwesome.Button name="rotate-left" onPress={reset} color="white" backgroundColor={theme.colors.primary}>
+    <FontAwesome.Button name="rotate-left" onPress={onReset} color="white" backgroundColor={theme.colors.primary}>
       Reset
     </FontAwesome.Button>
   );
