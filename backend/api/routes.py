@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from services import model_service, transcribe_service, mistral_service
+from services import transcribe_service, mistral_service
 from threading import Thread
 import shared
 
@@ -15,15 +15,10 @@ def set_routes(app, socketio):
     def stream():
         data = request.get_json()
 
-        t = Thread(target=shared.mistral_service.stream_response, args=(data))
+        t = Thread(target=shared.mistral_service.stream_response, args=([data]))
         t.start()
 
         return jsonify({"response": "Generation started"})
-
-    @app.route("/api/reset", methods=["POST"])
-    def reset():
-        model_service.reset_conversation()
-        return jsonify({"response": True})
 
     @app.route("/api/transcribe", methods=["POST"])
     def transcribe():
