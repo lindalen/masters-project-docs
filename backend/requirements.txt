@@ -8,3 +8,5 @@ datasets
 scipy
 openai-whisper
 accelerate
+optimum
+auto-gptq
