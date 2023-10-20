@@ -39,7 +39,7 @@ class MistralService:
 
         generate_kwargs = dict(
             inputs=model_inputs,
-            max_new_tokens=512,
+            max_new_tokens=256,
             do_sample=True,
             top_p=0.95,
             top_k=40,
