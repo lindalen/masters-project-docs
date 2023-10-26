@@ -85,7 +85,7 @@ const RecordVoiceButton = ({ onUserInput }: RecordVoiceButtonProps) => {
       {isLoading ? (
         <ActivityIndicator size={20} color="white" />
       ) : (
-        <FontAwesome name="microphone" size={40} color={isRecording ? "blue" : "white"} />
+        <FontAwesome name="microphone" size={28} color={isRecording ? "blue" : "white"} />
       )}
     </TouchableOpacity>
   );

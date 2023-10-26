@@ -25,7 +25,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onUserInput, onSubmit, input }) =
       flexDirection="row"
       alignItems="center"
       paddingHorizontal="m"
-      paddingVertical="l"
+      paddingVertical="m"
       gap="s"
       width="100%"
       backgroundColor="bgSecondary"
@@ -33,15 +33,18 @@ const ChatInput: React.FC<ChatInputProps> = ({ onUserInput, onSubmit, input }) =
       <TextInput
         style={{
           flex: 1,
-          height: 40,
           borderRadius: theme.spacing.s,
           paddingHorizontal: theme.spacing.s,
           backgroundColor: theme.colors.bgPrimary,
           color: theme.colors.textPrimary,
+          fontSize: 16,
+          lineHeight: 24,
+          minHeight: 24 + 8 + 8,
         }}
         placeholderTextColor={theme.colors.textDim}
         onChangeText={onUserInput}
         value={input}
+        multiline
         placeholder="Send a message..."
         onSubmitEditing={onSubmitEditing}
       />

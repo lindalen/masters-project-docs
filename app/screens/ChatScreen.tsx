@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import MessageList from "../components/MessageList";
-import ChatInput from "../components/InputArea";
+import ChatInput from "../components/ChatInput";
 import { createBox } from "@shopify/restyle";
 import { Theme } from "../theme";
 import { GestureResponderEvent, KeyboardAvoidingView } from "react-native";
