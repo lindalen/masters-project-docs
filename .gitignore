@@ -8,6 +8,7 @@ build/
 .venv/
 *.env
 masters/
+model/models
 
 # Node artifacts
 node_modules/
