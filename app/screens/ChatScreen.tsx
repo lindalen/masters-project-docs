@@ -29,6 +29,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
   const [error, setError] = useState<string | null>(null);
   const [currentToken, setCurrentToken] = useState("");
   const [socket, setSocket] = useState<Socket | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onChatSubmit = async (event: GestureResponderEvent) => {
     event.preventDefault();
@@ -36,6 +37,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
     const chatMessage = { role: "user", content: input };
     setMessages((prevMessages) => [...prevMessages, chatMessage]);
     setInput("");
+    setIsSubmitting(true);
 
     try {
       const response = await fetch(`${proxyUrl}/api/stream`, {
@@ -51,6 +53,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
       } else if (error instanceof RequestError) {
         setError("There was a problem with the request. Try again.");
       }
+      setIsSubmitting(false);
     }
   };
 
@@ -100,6 +103,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
       });
 
       socket.on("generation_end", () => {
+        setIsSubmitting(false);
         console.log(currentToken.trim());
       });
     }
@@ -117,7 +121,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
       <Box flex={1} backgroundColor="bgPrimary">
         <Header isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} onReset={onReset} />
         <MessageList messages={messages} />
-        <ChatInput onSubmit={onChatSubmit} onUserInput={onUserInput} input={input} />
+        <ChatInput onSubmit={onChatSubmit} onUserInput={onUserInput} isSubmitting={isSubmitting} input={input} />
       </Box>
     </KeyboardAvoidingView>
   );
