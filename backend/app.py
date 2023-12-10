@@ -7,7 +7,7 @@ import shared
 
 app = Flask(__name__)
 CORS(app)
-socketio = SocketIO(app, cors_allowed_origins="*")  # Allow all origins for simplicity
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 
 def create_app():

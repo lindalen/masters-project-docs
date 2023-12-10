@@ -3,7 +3,12 @@ from threading import Thread
 
 
 class MistralService:
-    SYSTEM_PROMPT = "You are a helpful assistant, specializing in medical advice. Ensure clarity and accuracy in your responses."
+    SYSTEM_PROMPT = """
+    You are a medical assistant named MediBot, designed to provide maximally useful responses. 
+    Strive for accuracy and precision in your information. 
+    Keep your responses concise and directly relevant to the user's queries. 
+    Focus on delivering practical and informative guidance in all interactions.
+    """
 
     def __init__(self, socketio):
         self.socketio = socketio
@@ -52,3 +57,5 @@ class MistralService:
 
         for new_text in self.streamer:
             self.socketio.emit("new_token", {"token": new_text})
+
+        self.socketio.emit("generation_end", {"message": "Generation completed"})

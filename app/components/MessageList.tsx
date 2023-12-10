@@ -35,7 +35,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages }) => {
       keyboardDidShowListener.remove();
     };
   }, []);
-
+  
   return (
     <Box flex={1}>
       <ScrollView style={{ flex: 1, paddingHorizontal: theme.spacing.m }} ref={scrollViewRef}>
@@ -48,7 +48,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages }) => {
                 backgroundColor={isUserMessage ? "bgSecondary" : "bgSecondary"}
                 padding="m"
                 marginBottom="m"
-                width="50%"
+                width="85%"
               >
                 <Box>
                   <Text variant="body" style={{ fontWeight: "bold" }}>
