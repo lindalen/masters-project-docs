@@ -1,1 +1,0 @@
-mistral_service = None
