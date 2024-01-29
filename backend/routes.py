@@ -1,4 +1,5 @@
 from fastapi import APIRouter, UploadFile, File, Body, HTTPException
+from starlette.responses import StreamingResponse
 from services.chatgpt import ChatGPTService
 from services.mistral import MistralService
 from services.transcription import TranscriptionService
@@ -17,7 +18,7 @@ async def transcribe_audio(file: UploadFile = File(...)):
     transcription = await transcription_service.transcribe(audio_bytes)
     return {"response": transcription}
 
-@router.post("/chat")
+@router.post("/api/chat")
 async def chat_with_model(model: str = Body(...), messages: list = Body(...)):
     try:
         if model.lower() == "mistral":
@@ -32,3 +33,6 @@ async def chat_with_model(model: str = Body(...), messages: list = Body(...)):
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+    
+

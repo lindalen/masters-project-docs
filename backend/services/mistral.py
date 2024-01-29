@@ -1,4 +1,7 @@
 import os
+import asyncio
+from queue import Queue
+import threading
 from mistralai.client import MistralClient
 from mistralai.models.chat_completion import ChatMessage
 
@@ -30,6 +33,3 @@ class MistralService:
             messages=formatted_messages,
         )
         return response
-    
-#for chunk in client.chat_stream(model=model, messages=messages):
-    #print(chunk)

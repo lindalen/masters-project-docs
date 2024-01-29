@@ -40,13 +40,16 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`${proxyUrl}/api/stream`, {
+      const response = await fetch(`${proxyUrl}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify([...messages, chatMessage]),
+        body: JSON.stringify({
+          model: "gpt-3.5",
+          messages: [...messages, chatMessage]}),
       });
-
       if (!response.ok) throw new RequestError("Request failed");
+      const data = await response.json()
+      setMessages((prevMessages) => [...prevMessages, {role: "assistant", content: data.content}])
     } catch (error) {
       if (error instanceof NetworkError) {
         setError("Unable to reach the server. Try again.");
@@ -57,23 +60,6 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
     }
   };
 
-  const onTokenReceived = (token: string) => {
-    setCurrentToken((prev) => prev + token);
-    setMessages((prevMessages) => {
-      if (prevMessages.length === 0 || prevMessages[prevMessages.length - 1].role !== "assistant") {
-        return [...prevMessages, { role: "assistant", content: token }];
-      }
-
-      const messagesExceptLast = prevMessages.slice(0, -1);
-      const updatedLastMessage = {
-        ...prevMessages[prevMessages.length - 1],
-        content: prevMessages[prevMessages.length - 1].content + token,
-      };
-
-      return [...messagesExceptLast, updatedLastMessage];
-    });
-  };
-
   const onUserInput = (text: string) => {
     setInput(text);
   };
@@ -82,39 +68,6 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
     setInput("");
     setMessages([]);
   };
-
-  useEffect(() => {
-    const socketInstance = io(proxyUrl);
-    setSocket(socketInstance);
-
-    return () => {
-      socketInstance.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (socket) {
-      socket.on("new_token", (data) => {
-        if (data.token.includes("[INST]")) {
-          setMessages((prevMessages) => [...prevMessages, { role: "assistant", content: "" }]);
-          return;
-        }
-        onTokenReceived(data.token);
-      });
-
-      socket.on("generation_end", () => {
-        setIsSubmitting(false);
-        console.log(currentToken.trim());
-      });
-    }
-
-    return () => {
-      if (socket) {
-        socket.off("new_token");
-        socket.off("generation_end");
-      }
-    };
-  }, [socket]);
 
   return (
     <KeyboardAvoidingView behavior="padding" style={{ maxHeight: "92.5%", flex: 1 }}>
