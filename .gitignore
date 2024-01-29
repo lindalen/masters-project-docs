@@ -9,6 +9,7 @@ build/
 *.env
 masters/
 model/models
+notebooks/chroma
 
 # Node artifacts
 node_modules/
