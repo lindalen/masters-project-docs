@@ -7,3 +7,5 @@ mistralai
 langchain_openai
 python-dotenv
 python-multipart
+chromadb
+ipykernel
