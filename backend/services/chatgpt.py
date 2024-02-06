@@ -28,5 +28,5 @@ class ChatGPTService:
 
     async def query(self, messages):
         formatted_messages = self.format_messages(messages)
-        response = self.client(formatted_messages)
+        response = self.client.invoke(formatted_messages)
         return response

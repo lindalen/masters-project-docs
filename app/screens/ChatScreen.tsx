@@ -5,8 +5,9 @@ import ChatInput from "../components/ChatInput";
 import { createBox } from "@shopify/restyle";
 import { Theme } from "../theme";
 import { GestureResponderEvent, KeyboardAvoidingView } from "react-native";
-import { proxyUrl } from "../utils";
+import { isChatMessage, proxyUrl } from "../utils";
 import io, { Socket } from "socket.io-client";
+import { ChatMessage, NetworkError, RequestError } from "../types";
 
 const Box = createBox<Theme>();
 
@@ -14,14 +15,6 @@ interface ChatScreenProps {
   isDarkMode: boolean;
   toggleDarkMode: () => void;
 }
-
-export type ChatMessage = {
-  role: string;
-  content: string;
-};
-
-class NetworkError extends Error {}
-class RequestError extends Error {}
 
 const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -44,12 +37,15 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "gpt-3.5",
+          model: "mistral",
           messages: [...messages, chatMessage]}),
       });
       if (!response.ok) throw new RequestError("Request failed");
-      const data = await response.json()
-      setMessages((prevMessages) => [...prevMessages, {role: "assistant", content: data.content}])
+      const message = await response.json()
+
+      if (!isChatMessage(message)) throw new RequestError("Wrong format.");
+
+      setMessages((prevMessages) => [...prevMessages, message])
     } catch (error) {
       if (error instanceof NetworkError) {
         setError("Unable to reach the server. Try again.");

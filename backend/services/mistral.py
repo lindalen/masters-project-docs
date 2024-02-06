@@ -2,14 +2,14 @@ import os
 import asyncio
 from queue import Queue
 import threading
+from fastapi import HTTPException
 from mistralai.client import MistralClient
 from mistralai.models.chat_completion import ChatMessage
 
-api_key = os.environ.get("MISTRAL_API_KEY")
-
 class MistralService:
     def __init__(self):
-        self.client = MistralClient(api_key=api_key)
+        _api_key = os.environ.get("MISTRAL_API_KEY")
+        self.client = MistralClient(api_key=_api_key)
 
     def format_messages(self, messages):
         formatted_messages = []
@@ -25,6 +25,11 @@ class MistralService:
                 formatted_messages.append(ChatMessage(role="system", content=message["content"]))
             
         return formatted_messages
+    
+    def format_response(self, response):
+        if response is None or len(response.choices) == 0:
+            raise HTTPException(status_code=500, detail="Invalid response.")
+        return response.choices[0].message
 
     async def query(self, messages):
         formatted_messages = self.format_messages(messages)
@@ -32,4 +37,4 @@ class MistralService:
             model="mistral-tiny",
             messages=formatted_messages,
         )
-        return response
+        return self.format_response(response)
