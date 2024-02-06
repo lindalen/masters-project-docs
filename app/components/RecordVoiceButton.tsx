@@ -65,7 +65,13 @@ const RecordVoiceButton = ({ onUserInput }: RecordVoiceButtonProps) => {
     setIsLoading(true);
 
     try {
-      const response = await FileSystem.uploadAsync(`${proxyUrl}/api/transcribe`, uri);
+      const response = await FileSystem.uploadAsync(`${proxyUrl}/api/transcribe`, uri, {
+        httpMethod: 'POST',
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+        uploadType: FileSystem.FileSystemUploadType.MULTIPART
+      });
 
       if (response.status == 200) {
         console.log("Success!");

@@ -1,5 +1,6 @@
+from models.StandardChatMessage import StandardChatMessage
 from fastapi import APIRouter, UploadFile, File, Body, HTTPException
-from starlette.responses import StreamingResponse
+from typing import List
 from services.chatgpt import ChatGPTService
 from services.mistral import MistralService
 from services.transcription import TranscriptionService
@@ -19,7 +20,7 @@ async def transcribe_audio(file: UploadFile = File(...)):
     return {"response": transcription}
 
 @router.post("/api/chat")
-async def chat_with_model(model: str = Body(...), messages: list = Body(...)):
+async def chat_with_model(messages: List[StandardChatMessage], model: str = Body(...)):
     try:
         if model.lower() == "mistral":
             client = mistral_service
@@ -32,7 +33,7 @@ async def chat_with_model(model: str = Body(...), messages: list = Body(...)):
 
         return response
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Something went bad. Error {e}")
 
     
 

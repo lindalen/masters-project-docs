@@ -37,8 +37,8 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "mistral",
-          messages: [...messages, chatMessage]}),
+          messages: [...messages, chatMessage],
+          model: "mistral"}),
       });
       if (!response.ok) throw new RequestError("Request failed");
       const message = await response.json()
@@ -52,8 +52,9 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
       } else if (error instanceof RequestError) {
         setError("There was a problem with the request. Try again.");
       }
-      setIsSubmitting(false);
     }
+
+    setIsSubmitting(false);
   };
 
   const onUserInput = (text: string) => {

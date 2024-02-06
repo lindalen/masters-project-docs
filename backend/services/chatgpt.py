@@ -1,4 +1,6 @@
 import os
+from typing import List
+from models.StandardChatMessage import StandardChatMessage
 from langchain.prompts.chat import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
@@ -11,18 +13,18 @@ class ChatGPTService:
     def __init__(self, model="gpt-3.5-turbo"):
         self.client = ChatOpenAI(temperature=0.69, model=model)
 
-    def format_messages(self, messages):
+    def format_messages(self, messages: List[StandardChatMessage]):
         formatted_messages = []
 
         for message in messages:
-            role = message["role"]
+            role = message.role
 
             if role == "user":
-                formatted_messages.append(HumanMessage(content=message["content"]))
+                formatted_messages.append(HumanMessage(content=message.content))
             elif role == "assistant":
-                formatted_messages.append(AIMessage(content=message["content"]))
+                formatted_messages.append(AIMessage(content=message.content))
             elif role == "system":
-                formatted_messages.append(SystemMessage(content=message["content"]))
+                formatted_messages.append(SystemMessage(content=message.content))
             
         return formatted_messages
 
