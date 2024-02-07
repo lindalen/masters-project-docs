@@ -59,7 +59,6 @@ const RecordVoiceButton = ({ onUserInput }: RecordVoiceButtonProps) => {
       file: recording.getURI(),
     };
 
-    console.log("Recording stopped and stored at", uri);
     setIsRecording(false);
     transcribeRecording(newRecording);
   }

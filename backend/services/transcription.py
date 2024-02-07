@@ -8,6 +8,8 @@ class TranscriptionService:
         self.client = OpenAI()
 
     async def transcribe(self, audio_bytes: bytes) -> str:
+        data_dir = "./data"
+        os.makedirs(data_dir, exist_ok=True)
         temp_file_path = f"./data/{uuid.uuid4()}.wav"
         try:
             with open(temp_file_path, "wb") as temp_audio:

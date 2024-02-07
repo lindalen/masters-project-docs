@@ -1,6 +1,6 @@
 import { ChatMessage } from "./types";
 
-export const proxyUrl = "http://192.168.0.124:8000";
+export const proxyUrl = "https://backend-7cml.onrender.com/"//http://192.168.0.124:8000";
 
 export function isChatMessage(obj: any): obj is ChatMessage {
     return (

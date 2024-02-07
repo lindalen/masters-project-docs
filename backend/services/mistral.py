@@ -10,7 +10,7 @@ from mistralai.models.chat_completion import ChatMessage
 
 class MistralService:
     def __init__(self):
-        _api_key = os.environ.get("MISTRAL_API_KEY")
+        _api_key = os.getenv("MISTRAL_API_KEY")
         self.client = MistralClient(api_key=_api_key)
 
     def format_messages(self, messages: List[StandardChatMessage]):
