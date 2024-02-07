@@ -1,30 +1,29 @@
-# Masters Project
+# Masters Project: Conversational Medical Assistant
 
 ## Overview
-Proof-of-Concept Medical Chatbot: A Flask and React-based application that uses a fine-tuned language model to provide real-time medical advice.
-
-![image](https://github.com/lindalen/masters-project/assets/43276209/a7788795-bebe-46c4-880b-c0d5bbb12299)
+A state-of-the-art, interactive medical assistant designed to provide personalized healthcare advice. Leveraging fine-tuned Language Learning Models (LLMs) with Retrieval-Augmented Generation (RAG), this application aims to revolutionize preventive healthcare by delivering accurate, real-time medical guidance.
 
 ## Objective
-To serve as a digital twin for preventive healthcare.
+To develop a digital healthcare assistant that empowers individuals with instant access to medical information and advice, facilitating early detection and preventive healthcare strategies.
 
 ## Tech Stack
-- Backend: Flask (Python)
-- Frontend: React Native + Restyle
-- AI Model: Fine-tuned language model
+- **Backend**: FastAPI, offering a robust and scalable API development environment to interface with advanced LLMs.
+- **Frontend**: React Native and Restyle, providing a cross-platform mobile experience with a seamless and intuitive user interface.
+- **AI Model**: Advanced LLMs, fine-tuned with specialized medical datasets and augmented with RAG capabilities for enhanced accuracy and relevance in responses.
 
 ## Setup
 
 ### Backend
-1. Navigate to `/backend`
-2. Install dependencies: `pip install -r requirements.txt`
-3. Run app: `flask run`
+1. Navigate to the `backend` directory.
+2. Install dependencies: `pip install -r requirements.txt`.
+3. Run the application: `uvicorn main:app --reload`.
 
 ### Frontend
-1. Navigate to `/app`
-2. Install dependencies: `npm install`
-3. Run app: `npx expo start --web`
+1. Navigate to the `app` directory.
+2. Install dependencies: `npm install`.
+3. Run the application: `npx expo start`.
 
 ## License
-MIT
+MIT License
+
 
