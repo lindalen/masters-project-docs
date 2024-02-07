@@ -11,21 +11,20 @@ import { ChatMessage, NetworkError, RequestError } from "../types";
 import MediBotIcon from "../components/MediBotIcon";
 import DarkModeToggler from "../components/DarkModeToggler";
 import ResetButton from "../components/ResetButton";
+import { useAppStore } from "../App";
 
 const Box = createBox<Theme>();
 
-interface ChatScreenProps {
-  isDarkMode: boolean;
-  toggleDarkMode: () => void;
-}
+interface ChatScreenProps {}
 
-const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) => {
+const ChatScreen: React.FC<ChatScreenProps> = ({}) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [currentToken, setCurrentToken] = useState("");
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const model = useAppStore((state) => state.model)
 
   const onChatSubmit = async (event: GestureResponderEvent) => {
     event.preventDefault();
@@ -41,7 +40,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: [...messages, chatMessage],
-          model: "mistral"}),
+          model: model}),
       });
       if (!response.ok) throw new RequestError("Request failed");
       const message = await response.json()
@@ -75,7 +74,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
         <Header>
           <MediBotIcon/>
           <Box flexDirection="row" gap="l">
-            <DarkModeToggler isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode}/>
+            <DarkModeToggler/>
             <ResetButton onReset={onReset}/>
           </Box>
         </Header>

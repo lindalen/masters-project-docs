@@ -3,25 +3,26 @@ import React from "react";
 import { Theme } from "../theme";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Switch } from "react-native";
+import { useAppStore } from "../App";
 
 const Box = createBox<Theme>();
 
-interface DarkModeTogglerProps {
-    isDarkMode: boolean;
-    toggleDarkMode: () => void;
-  }
+interface DarkModeTogglerProps {}
 
-const DarkModeToggler: React.FC<DarkModeTogglerProps> = ({ isDarkMode, toggleDarkMode  }) => {
+const DarkModeToggler: React.FC<DarkModeTogglerProps> = ({ }) => {
     const theme = useTheme();
+
+    const darkMode = useAppStore((state) => state.darkMode)
+    const setDarkMode = useAppStore((state) => state.setDarkMode)
 
     return (
         <Box flexDirection="row" gap="s" alignItems="center">
-          {isDarkMode ? (
+          {darkMode ? (
             <FontAwesome name="moon-o" size={24} color={theme.colors.textPrimary} />
           ) : (
             <FontAwesome name="sun-o" size={24} color={theme.colors.textPrimary} />
           )}
-          <Switch value={isDarkMode} onValueChange={toggleDarkMode} />
+          <Switch value={darkMode} onValueChange={setDarkMode} />
         </Box>
     )
 }

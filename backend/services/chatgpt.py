@@ -8,6 +8,7 @@ from langchain.prompts.chat import (
 )
 from langchain.schema import HumanMessage, SystemMessage, AIMessage
 from langchain_openai import ChatOpenAI
+from fastapi import HTTPException
 
 class ChatGPTService:
     def __init__(self, model="gpt-3.5-turbo"):
@@ -27,8 +28,13 @@ class ChatGPTService:
                 formatted_messages.append(SystemMessage(content=message.content))
             
         return formatted_messages
+    
+    def format_response(self, response):
+        if response is None:
+            raise HTTPException(status_code=500, detail="Invalid response.")
+        return {"role": "assistant", "content": response.content}
 
     async def query(self, messages):
         formatted_messages = self.format_messages(messages)
         response = self.client.invoke(formatted_messages)
-        return response
+        return self.format_response(response)
