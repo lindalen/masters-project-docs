@@ -8,6 +8,9 @@ import { GestureResponderEvent, KeyboardAvoidingView } from "react-native";
 import { isChatMessage, proxyUrl } from "../utils";
 import io, { Socket } from "socket.io-client";
 import { ChatMessage, NetworkError, RequestError } from "../types";
+import MediBotIcon from "../components/MediBotIcon";
+import DarkModeToggler from "../components/DarkModeToggler";
+import ResetButton from "../components/ResetButton";
 
 const Box = createBox<Theme>();
 
@@ -69,7 +72,13 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ isDarkMode, toggleDarkMode }) =
   return (
     <KeyboardAvoidingView behavior="padding" style={{ maxHeight: "92.5%", flex: 1 }}>
       <Box flex={1} backgroundColor="bgPrimary">
-        <Header isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} onReset={onReset} />
+        <Header>
+          <MediBotIcon/>
+          <Box flexDirection="row" gap="l">
+            <DarkModeToggler isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode}/>
+            <ResetButton onReset={onReset}/>
+          </Box>
+        </Header>
         <MessageList messages={messages} />
         <ChatInput onSubmit={onChatSubmit} onUserInput={onUserInput} isSubmitting={isSubmitting} input={input} />
       </Box>

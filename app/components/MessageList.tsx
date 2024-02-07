@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Theme, theme } from "../theme";
 import { createBox, createText } from "@shopify/restyle";
 import { Keyboard, ScrollView, View } from "react-native";
-import { ChatMessage } from "../screens/ChatScreen";
+import { ChatMessage } from "../types";
 
 const Box = createBox<Theme>();
 const Text = createText<Theme>();
