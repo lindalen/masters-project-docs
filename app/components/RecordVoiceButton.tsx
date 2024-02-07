@@ -15,6 +15,12 @@ type RecordVoiceButtonProps = {
   onUserInput: (text: string) => void;
 };
 
+interface ReactNativeFile {
+  uri: string;
+  type: string;
+  name: string;
+}
+
 const RecordVoiceButton = ({ onUserInput }: RecordVoiceButtonProps) => {
   const [recording, setRecording] = useState<Audio.Recording>(new Audio.Recording());
   const [isRecording, setIsRecording] = useState(false);
@@ -61,28 +67,37 @@ const RecordVoiceButton = ({ onUserInput }: RecordVoiceButtonProps) => {
   async function transcribeRecording(newRecording: AudioClip) {
     const { file: uri } = newRecording;
     if (!uri) return;
-
+  
     setIsLoading(true);
+  
+    let formData = new FormData();
 
+    const file: ReactNativeFile = {
+      uri: uri,
+      type: 'audio/wav',
+      name: 'audiofile.wav',
+    }
+    formData.append('file', file as any);
+  
     try {
-      const response = await FileSystem.uploadAsync(`${proxyUrl}/api/transcribe`, uri, {
-        httpMethod: 'POST',
+      const response = await fetch(`${proxyUrl}/api/transcribe`, {
+        method: 'POST',
         headers: {
-            'Content-Type': 'multipart/form-data',
+          'Content-Type': 'multipart/form-data',
         },
-        uploadType: FileSystem.FileSystemUploadType.MULTIPART
+        body: formData,
       });
-
-      if (response.status == 200) {
-        console.log("Success!");
-        const parsedResponse = JSON.parse(response.body); // Assuming backend sends JSON
-        console.log(parsedResponse);
+  
+      if (response.ok) {
+        const parsedResponse = await response.json();
         onUserInput(parsedResponse.response);
+      } else {
+        console.error("Transcription failed with status:", response.status);
       }
     } catch (error) {
       console.error("Transcription Error:", error);
     }
-
+  
     setIsLoading(false);
   }
 

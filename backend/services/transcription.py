@@ -18,7 +18,7 @@ class TranscriptionService:
                     model="whisper-1", 
                     file=audio_file
                 )
-            return transcript['text'].strip()
+            return transcript.text.strip()
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
         finally:
