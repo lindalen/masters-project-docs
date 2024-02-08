@@ -3,7 +3,7 @@ import React from "react";
 import { Theme } from "../theme";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Switch } from "react-native";
-import { useAppStore } from "../App";
+import { useAppStore } from "../state";
 
 const Box = createBox<Theme>();
 

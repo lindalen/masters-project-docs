@@ -1,42 +1,35 @@
 import os
-import asyncio
-from queue import Queue
-import threading
-from typing import List
-from models.StandardChatMessage import StandardChatMessage
+from typing import List, AsyncGenerator
 from fastapi import HTTPException
-from mistralai.client import MistralClient
+from mistralai.async_client import MistralAsyncClient
 from mistralai.models.chat_completion import ChatMessage
+from models.StandardChatMessage import StandardChatMessage
 
 class MistralService:
     def __init__(self):
         _api_key = os.getenv("MISTRAL_API_KEY")
-        self.client = MistralClient(api_key=_api_key)
+        self.client = MistralAsyncClient(api_key=_api_key)
 
-    def format_messages(self, messages: List[StandardChatMessage]):
-        formatted_messages = []
-
-        for message in messages:
-            role = message.role
-
-            if role == "user":
-                formatted_messages.append(ChatMessage(role="user", content=message.content))
-            elif role == "assistant":
-                formatted_messages.append(ChatMessage(role="assistant", content=message.content))
-            elif role == "system":
-                formatted_messages.append(ChatMessage(role="system", content=message.content))
-            
-        return formatted_messages
+    def format_messages(self, messages: List[StandardChatMessage]) -> List[ChatMessage]:
+        return [
+            ChatMessage(role=message.role, content=message.content)
+            for message in messages
+        ]
     
-    def format_response(self, response):
-        if response is None or len(response.choices) == 0:
-            raise HTTPException(status_code=500, detail="Invalid response.")
-        return response.choices[0].message
-
-    async def query(self, messages: List[StandardChatMessage]):
+    async def query(self, messages: List[StandardChatMessage]) -> str:
         formatted_messages = self.format_messages(messages)
-        response = self.client.chat(
+        response = await self.client.chat(
             model="mistral-tiny",
             messages=formatted_messages,
         )
-        return self.format_response(response)
+        if response is None or len(response.choices) == 0:
+            raise HTTPException(status_code=500, detail="Invalid response.")
+        return response.choices[0].message.content
+
+    async def stream_response(self, messages: List[StandardChatMessage]) -> AsyncGenerator[str, None]:
+        formatted_messages = self.format_messages(messages)
+        async for chunk in self.client.chat_stream(model="mistral-tiny", messages=formatted_messages):
+            if chunk is None or len(chunk.choices) == 0:
+                raise HTTPException(status_code=500, detail="Invalid response.")
+            yield chunk.choices[0].delta.content
+

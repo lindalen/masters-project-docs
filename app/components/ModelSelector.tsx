@@ -1,8 +1,9 @@
 import React from 'react';
 import { Picker } from '@react-native-picker/picker';
-import { Model, useAppStore } from '../App';
 import { Theme, theme } from '../theme';
 import { createBox, createText } from '@shopify/restyle';
+import { useAppStore } from '../state';
+import { Model } from '../types';
 
 const Text = createText<Theme>();
 const Box = createBox<Theme>();

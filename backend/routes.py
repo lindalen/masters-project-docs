@@ -1,5 +1,6 @@
 from models.StandardChatMessage import StandardChatMessage
 from fastapi import APIRouter, UploadFile, File, Body, HTTPException
+from fastapi.responses import StreamingResponse
 from typing import List
 from services.chatgpt import ChatGPTService
 from services.mistral import MistralService
@@ -34,6 +35,28 @@ async def chat_with_model(messages: List[StandardChatMessage], model: str = Body
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Something went bad. Error {e}")
+
+@router.post("/api/stream")
+async def stream_chat_with_model(
+    messages: List[StandardChatMessage], 
+    model: str = Body(...)
+):
+    # Placeholder for model selection logic
+    if model.lower() not in ["mistral", "gpt-3.5", "gpt-4"]:
+        raise HTTPException(status_code=400, detail="Unsupported model")
+
+    client = mistral_service
+
+    try:
+        async def generate_responses():
+            async for response in client.stream_response(messages):
+                yield response
+
+        return StreamingResponse(generate_responses(), media_type="text/plain")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error streaming chat responses: {e}")
+
+
 
     
 
