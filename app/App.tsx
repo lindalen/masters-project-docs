@@ -41,15 +41,12 @@ export default function App() {
         <Box height="7.5%" flexDirection="row" backgroundColor="primary" alignItems="center">
           <Box flex={1} height="100%" justifyContent="center" alignItems="center" onTouchEnd={() => setScreen(Screen.Chat)}>
             <FontAwesome name="comments" size={25} color={theme.colors.textLight} />
-            <Text variant="primary">Chat</Text>
           </Box>
           <Box flex={1} height="100%" justifyContent="center" alignItems="center">
             <FontAwesome name="user" size={25} color={theme.colors.textLight} />
-            <Text variant="primary">Profile</Text>
           </Box>
           <Box flex={1} height="100%" justifyContent="center" alignItems="center" onTouchEnd={() => setScreen(Screen.Settings)}>
             <FontAwesome name="cog" size={25} color={theme.colors.textLight} />
-            <Text variant="primary">Settings</Text>
           </Box>
         </Box>
       </Box>

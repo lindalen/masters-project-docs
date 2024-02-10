@@ -5,11 +5,11 @@ import ChatInput from "../components/ChatInput";
 import { createBox } from "@shopify/restyle";
 import { Theme } from "../theme";
 import { KeyboardAvoidingView } from "react-native";
-import MediBotIcon from "../components/MediBotIcon";
 import DarkModeToggler from "../components/DarkModeToggler";
 import ResetButton from "../components/ResetButton";
 import { useSendMessage } from "../hooks/useSendMessage";
 import { useAppStore } from "../state";
+import AppIcon from "../components/AppIcon";
 
 const Box = createBox<Theme>();
 
@@ -48,10 +48,10 @@ const ChatScreen: React.FC<ChatScreenProps> = ({}) => {
     <KeyboardAvoidingView behavior="padding" style={{ maxHeight: "92.5%", flex: 1 }}>
       <Box flex={1} backgroundColor="bgPrimary">
         <Header>
-          <MediBotIcon/>
+          <AppIcon/>
           <Box flexDirection="row" gap="l">
-            <DarkModeToggler/>
             <ResetButton onReset={onReset}/>
+            <DarkModeToggler/>
           </Box>
         </Header>
         <MessageList messages={messages} />

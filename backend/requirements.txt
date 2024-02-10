@@ -9,3 +9,5 @@ python-dotenv
 python-multipart
 chromadb
 ipykernel
+python-jose[cryptography]
+passlib[bcrypt]

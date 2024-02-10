@@ -17,7 +17,7 @@ export async function postChatMessage(messages, model) {
   }
 }
 
-export async function streamChatMessages(messages, model) {
+export async function streamChatMessages(messages, model, onChunkReceived) {
   fetch(`${proxyUrl}/api/stream`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

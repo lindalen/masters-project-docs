@@ -1,5 +1,5 @@
 import { postChatMessage } from "../utils";
-import { Role } from "../types";
+import { Role, isChatMessage } from "../types";
 import { useAppStore } from "../state";
 
 export const useSendMessage = () => {
@@ -14,8 +14,13 @@ export const useSendMessage = () => {
     try {
       // Attempt to send the chat message
       const response = await postChatMessage([...messages, chatMessage], model);
-      addMessage({role: Role.AI, content: response});
-
+      
+      if (isChatMessage(response)) {
+        addMessage(response)
+      } else {
+        addMessage({role: Role.AI, content: response});
+      }
+    
       return response;
     } catch (error) {
       console.error('Error sending message:', error);

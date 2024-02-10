@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "app",
-    "slug": "app",
+    "name": "medibot-test",
+    "slug": "medibot-test",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/app-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.lindalen.medibot"
     },
     "android": {
       "adaptiveIcon": {
@@ -41,7 +42,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "29238c22-0443-4f13-b64f-3121c8b840a1"
+        "projectId": "557c9210-49c9-49e1-ac49-6acb553b65b1"
       }
     }
   }

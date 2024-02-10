@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Theme, theme } from "../theme";
 import { createBox, createText } from "@shopify/restyle";
 import { Keyboard, ScrollView, View } from "react-native";
-import { ChatMessage } from "../types";
+import { ChatMessage, Role } from "../types";
 
 const Box = createBox<Theme>();
 const Text = createText<Theme>();
@@ -40,8 +40,8 @@ const MessageList: React.FC<MessageListProps> = ({ messages }) => {
     <Box flex={1}>
       <ScrollView style={{ flex: 1, paddingHorizontal: theme.spacing.m }} ref={scrollViewRef}>
         {messages.map((message, index) => {
-          const isUserMessage = message.role == "user";
-
+          const isUserMessage = message.role == Role.User;
+          const messageTheme = isUserMessage ? theme.colors.secondary : theme.colors.primary
           return (
             <Box key={index} flexDirection="row" justifyContent={isUserMessage ? "flex-start" : "flex-end"}>
               <Box
@@ -49,14 +49,17 @@ const MessageList: React.FC<MessageListProps> = ({ messages }) => {
                 padding="m"
                 marginBottom="m"
                 width="85%"
+                borderWidth={1}
+                borderRadius={4}
+                style={{borderColor: messageTheme}}
               >
                 <Box>
-                  <Text variant="body" style={{ fontWeight: "bold" }}>
+                  <Text variant="body" style={{ fontWeight: "bold", color: messageTheme }}>
                     {isUserMessage ? "You" : "MediBot"}
                   </Text>
                 </Box>
                 <Box>
-                  <Text variant="body">{message.content}</Text>
+                  <Text variant="body">{message.content.toString() }</Text>
                 </Box>
               </Box>
             </Box>

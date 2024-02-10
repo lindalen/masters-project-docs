@@ -1,4 +1,4 @@
-import { createBox, useTheme } from "@shopify/restyle";
+import { backgroundColor, createBox, useTheme } from "@shopify/restyle";
 import React from "react";
 import { Theme } from "../theme";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -22,7 +22,7 @@ const DarkModeToggler: React.FC<DarkModeTogglerProps> = ({ }) => {
           ) : (
             <FontAwesome name="sun-o" size={24} color={theme.colors.textPrimary} />
           )}
-          <Switch value={darkMode} onValueChange={setDarkMode} />
+          <Switch value={darkMode} onValueChange={setDarkMode} trackColor={{true: theme.colors.primary}}/>
         </Box>
     )
 }

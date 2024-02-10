@@ -6,14 +6,14 @@ import { Image } from "react-native";
 const Text = createText<Theme>();
 const Box = createBox<Theme>();
 
-const MediBotIcon = () => {
+const AppIcon = () => {
     return (
     <Box flexDirection="row" alignItems="center">
-        <Image source={require("../assets/medibot-icon.png")} style={{ width: 36, height: 36, marginRight: 4 }} />
-        <Text color="textPrimary" fontSize={24}>
-          MediBot
+        <Image source={require("../assets/cropped-app-icon-no-bg.png")} style={{ width: 36, height: 36, marginRight: 4 }} />
+        <Text color="textPrimary" fontSize={20}>
+          WellVerse
         </Text>
       </Box>)
 }
 
-export default MediBotIcon;
+export default AppIcon;

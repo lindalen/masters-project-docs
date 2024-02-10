@@ -2,8 +2,8 @@
 import { createTheme } from "@shopify/restyle";
 
 export const colors = {
-  primary: "#22c55e",
-  secondary: "#ec4899",
+  primary: "#01d4a3",
+  secondary: "#0599db",
 
   bgLightPrimary: "#f8fafc",
   bgLightSecondary: "#e2e8f0",
