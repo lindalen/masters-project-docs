@@ -1,6 +1,11 @@
 // theme.ts
 import { createTheme } from "@shopify/restyle";
 
+// $turquoise: #26CCB6ff;
+// $honeydew: #E1F7EEff;
+// $mint: #01D4A3ff;
+// $cerulean: #0A75A5ff;
+// $celestial-blue: #0599DBff;
 export const colors = {
   primary: "#01d4a3",
   secondary: "#0599db",
