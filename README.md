@@ -1,4 +1,8 @@
-# Masters Project: Conversational Medical Assistant
+# Masters Project: WellVerse - Conversational Medical Assistant
+
+<div align="center">
+    <img src="https://github.com/lindalen/masters-project/assets/43276209/2f265ee7-db2d-43a9-b6e5-0ebb26115e7c" width="400" height="800" style="display: block; margin-left: auto; margin-right: auto;">
+</div>
 
 ## Overview
 A state-of-the-art, interactive medical assistant designed to provide personalized healthcare advice. Leveraging fine-tuned Language Learning Models (LLMs) with Retrieval-Augmented Generation (RAG), this application aims to revolutionize preventive healthcare by delivering accurate, real-time medical guidance.
