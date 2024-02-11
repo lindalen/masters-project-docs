@@ -11,3 +11,4 @@ chromadb
 ipykernel
 python-jose[cryptography]
 passlib[bcrypt]
+psycopg2
