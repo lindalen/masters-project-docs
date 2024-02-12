@@ -6,11 +6,24 @@ import { Image } from "react-native";
 const Text = createText<Theme>();
 const Box = createBox<Theme>();
 
-const AppIcon = () => {
+interface AppIconProps {
+  iconSize?: number;
+  fontSize?: number;
+  gapSize?: number;
+}
+const AppIcon: React.FC<AppIconProps> = ({iconSize, fontSize, gapSize}) => {
+    const settings = {
+      iconSize: iconSize || 36,
+      fontSize: fontSize || 20,
+      gapSize: gapSize || 4,
+    }
+
     return (
     <Box flexDirection="row" alignItems="center">
-        <Image source={require("../assets/cropped-app-icon-no-bg.png")} style={{ width: 36, height: 36, marginRight: 4 }} />
-        <Text color="textPrimary" fontSize={20}>
+        <Image 
+          source={require("../assets/cropped-app-icon-no-bg.png")} 
+          style={{ width: settings.iconSize, height: settings.iconSize, marginRight: settings.gapSize }} />
+        <Text color="textPrimary" fontSize={settings.fontSize}>
           WellVerse
         </Text>
       </Box>)

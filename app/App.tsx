@@ -8,6 +8,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Dimensions } from "react-native";
 import SettingScreen from "./screens/SettingScreen";
 import { useAppStore } from './state';
+import LoginScreen from './screens/LoginScreen';
 
 enum Screen {
   Chat = "chat",
@@ -21,6 +22,7 @@ const Text = createText<Theme>();
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>(Screen.Chat);
+  const loggedIn = useAppStore((state) => state.loggedIn)
   const darkMode = useAppStore((state) => state.darkMode)
   const currentTheme = darkMode ? darkTheme : theme;
 
@@ -36,7 +38,10 @@ export default function App() {
 
   return (
     <ThemeProvider theme={currentTheme}>
-      <Box height={screenHeight} flex={1}>
+      {!loggedIn ?
+      <LoginScreen/>
+      :
+        <Box height={screenHeight} flex={1}>
         {renderScreen()}
         <Box height="7.5%" flexDirection="row" backgroundColor="primary" alignItems="center">
           <Box flex={1} height="100%" justifyContent="center" alignItems="center" onTouchEnd={() => setScreen(Screen.Chat)}>
@@ -49,7 +54,7 @@ export default function App() {
             <FontAwesome name="cog" size={25} color={theme.colors.textLight} />
           </Box>
         </Box>
-      </Box>
+      </Box>}
     </ThemeProvider>
   );
 }

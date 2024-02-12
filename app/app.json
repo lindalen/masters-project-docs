@@ -2,9 +2,9 @@
   "expo": {
     "name": "medibot-test",
     "slug": "medibot-test",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/app-icon.png",
+    "icon": "./assets/cropped-app-icon-no-bg.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -16,7 +16,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.lindalen.medibot"
+      "bundleIdentifier": "com.lindalen.medibot",
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {

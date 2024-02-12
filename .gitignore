@@ -9,7 +9,6 @@ build/
 *.env
 masters/
 model/models
-backend/data
 notebooks/chroma
 
 # Node artifacts
