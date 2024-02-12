@@ -22,7 +22,8 @@ const Text = createText<Theme>();
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>(Screen.Chat);
-  const loggedIn = useAppStore((state) => state.loggedIn)
+  const user = useAppStore((state) => state.user)
+  const setUser = useAppStore((state) => state.setUser)
   const darkMode = useAppStore((state) => state.darkMode)
   const currentTheme = darkMode ? darkTheme : theme;
 
@@ -38,7 +39,7 @@ export default function App() {
 
   return (
     <ThemeProvider theme={currentTheme}>
-      {!loggedIn ?
+      {!user ?
       <LoginScreen/>
       :
         <Box height={screenHeight} flex={1}>

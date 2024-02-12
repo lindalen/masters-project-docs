@@ -1,10 +1,11 @@
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Model, ChatMessage, Role } from "./types";
+import { Model, ChatMessage, Role, User } from "./types";
 
 interface AppState {
-    loggedIn: boolean;
+    user?: User;
+    setUser: (user: User) => void;
     darkMode: boolean;
     setDarkMode: (b: boolean) => void;
     model: Model;
@@ -17,7 +18,7 @@ interface AppState {
 export const useAppStore = create<AppState>()(
         persist(
             (set) => ({
-                loggedIn: false,
+                setUser: (user) => set({ user: user }),
                 darkMode: true,
                 setDarkMode: (mode) => set({ darkMode: mode }),
                 model: Model.MISTRAL,

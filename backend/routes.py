@@ -1,8 +1,10 @@
-from data.apple import decode_apple_user_token
+from dependencies import get_db
+from services.apple_auth import AppleAuthService
 from models.AppleSignInPayload import AppleSignInPayload
 from models.StandardChatMessage import StandardChatMessage
-from fastapi import APIRouter, UploadFile, File, Body, HTTPException
+from fastapi import APIRouter, UploadFile, File, Body, HTTPException, Depends
 from fastapi.responses import StreamingResponse
+from sqlalchemy.orm import Session
 from typing import List
 from services.chatgpt import ChatGPTService
 from services.mistral import MistralService
@@ -59,12 +61,11 @@ async def stream_chat_with_model(
         raise HTTPException(status_code=500, detail=f"Error streaming chat responses: {e}")
 
 @router.post("/auth/apple")
-async def apple_auth(payload: AppleSignInPayload):
-    print("Payload received!")
-    print(payload)
+async def apple_auth(payload: AppleSignInPayload, db: Session = Depends(get_db)):
+    service = AppleAuthService(db)
     try:
-        apple_user = await decode_apple_user_token(payload.identityToken)
-        return {"user": repr(apple_user)}
+        apple_user = await service.authenticate(payload.identityToken)
+        return apple_user
     except Exception as e:
         raise HTTPException(status_code=401, detail=str(e))
 

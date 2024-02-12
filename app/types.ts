@@ -30,3 +30,18 @@ export interface ChatResponse {
   
 export class NetworkError extends Error {}
 export class RequestError extends Error {}
+
+export interface User {
+  id: number;
+  email: string;
+  full_name?: string;
+}
+
+export function isUser(obj: any): obj is User {
+  return (
+    obj !== null &&
+    typeof obj === "object" &&
+    typeof obj.id === "number" &&
+    typeof obj.email === "string"
+  );
+}

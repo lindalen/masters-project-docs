@@ -1,4 +1,7 @@
-export const proxyUrl = "https://backend-7cml.onrender.com"//http://192.168.0.124:8000
+const DEV_URL = "http://192.168.0.124:8000"
+const PROD_URL = "https://backend-7cml.onrender.com"
+
+export const proxyUrl = PROD_URL
 
 export async function postChatMessage(messages, model) {
   try {
@@ -31,7 +34,6 @@ export async function streamChatMessages(messages, model, onChunkReceived) {
     const reader = stream.getReader();
     const processChunk = ({ done, value }) => {
       if (done) {
-        console.log('Stream complete');
         return;
       }
       // Process the chunk
