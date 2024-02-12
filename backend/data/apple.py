@@ -43,7 +43,7 @@ async def decode_apple_user_token(apple_user_token):
             apple_user_token,
             key.to_pem(),
             algorithms=["RS256"],
-            audience="com.medibot",
+            audience="com.lindalen.medibot",
             issuer="https://appleid.apple.com"
         )
         apple_user = AppleUser(claims["sub"], claims.get("email"))
