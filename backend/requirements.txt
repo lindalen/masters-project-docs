@@ -12,3 +12,4 @@ ipykernel
 python-jose[cryptography]
 passlib[bcrypt]
 psycopg2
+httpx
