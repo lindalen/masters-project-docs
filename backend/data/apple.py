@@ -37,13 +37,12 @@ async def decode_apple_user_token(apple_user_token):
     headers = jwt.get_unverified_headers(apple_user_token)
     kid = headers["kid"]
     key = APPLE_PUBLIC_KEYS[kid]
-
     try:
         claims = jwt.decode(
             apple_user_token,
             key.to_pem(),
             algorithms=["RS256"],
-            audience="com.lindalen.medibot",
+            audience="com.medibot",
             issuer="https://appleid.apple.com"
         )
         apple_user = AppleUser(claims["sub"], claims.get("email"))
