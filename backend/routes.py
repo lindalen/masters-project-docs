@@ -1,3 +1,5 @@
+from data.apple import decode_apple_user_token
+from models.AppleSignInPayload import AppleSignInPayload
 from models.StandardChatMessage import StandardChatMessage
 from fastapi import APIRouter, UploadFile, File, Body, HTTPException
 from fastapi.responses import StreamingResponse
@@ -55,6 +57,15 @@ async def stream_chat_with_model(
         return StreamingResponse(generate_responses(), media_type="text/plain")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error streaming chat responses: {e}")
+
+@router.post("/auth/apple")
+async def apple_auth(payload: AppleSignInPayload):
+    try:
+        apple_user = await decode_apple_user_token(payload.identityToken)
+        return {"user": repr(apple_user)}
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=str(e))
+
 
 
 
