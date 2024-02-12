@@ -42,10 +42,11 @@ async def decode_apple_user_token(apple_user_token):
             apple_user_token,
             key.to_pem(),
             algorithms=["RS256"],
-            audience="com.medibot",
-            issuer="https://appleid.apple.com"
+            audience="com.medibot"
         )
         apple_user = AppleUser(claims["sub"], claims.get("email"))
+        print("User created!")
+        print(apple_user)
         return apple_user
     except jwt.ExpiredSignatureError:
         raise Exception("That token has expired.")

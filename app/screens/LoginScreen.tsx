@@ -29,7 +29,7 @@ const LoginScreen = () => {
                 AppleAuthentication.AppleAuthenticationScope.EMAIL,
               ],
             });
-            console.log(credential.identityToken)
+            console.log(credential)
 
             const response = await fetch(`${proxyUrl}/auth/apple`, {
                 method: 'POST',

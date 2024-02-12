@@ -1,4 +1,4 @@
-export const proxyUrl = "https://backend-7cml.onrender.com"//;http://192.168.0.124:8000
+export const proxyUrl = "https://backend-7cml.onrender.com"//http://192.168.0.124:8000
 
 export async function postChatMessage(messages, model) {
   try {

@@ -60,6 +60,8 @@ async def stream_chat_with_model(
 
 @router.post("/auth/apple")
 async def apple_auth(payload: AppleSignInPayload):
+    print("Payload received!")
+    print(payload)
     try:
         apple_user = await decode_apple_user_token(payload.identityToken)
         return {"user": repr(apple_user)}
