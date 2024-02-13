@@ -5,6 +5,8 @@ from databases import Database
 import os
 
 DATABASE_URL = os.getenv("INTERNAL_DB_URL")
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
