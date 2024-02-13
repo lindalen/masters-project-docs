@@ -42,7 +42,7 @@ class AppleAuthService:
         except jwt.ExpiredSignatureError:
             raise Exception("The token has expired.")
         except jwt.JWTClaimsError as e:
-            raise Exception("Token's claims are invalid: " + str(e))
+            raise Exception("Token's claims are invalid: " + str(e) + "token: " + identity_token)
         except Exception as e:
             raise Exception("An unexpected error occurred: " + str(e))
         
