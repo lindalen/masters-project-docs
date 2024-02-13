@@ -35,14 +35,14 @@ class AppleAuthService:
                 identity_token,
                 key.to_pem(),
                 algorithms=["RS256"],
-                audience="com.medibot",  # Ensure this matches your Service ID
+                audience="com.lindalen.medibot",  # Ensure this matches your Service ID
                 issuer="https://appleid.apple.com"
             )
             return claims
         except jwt.ExpiredSignatureError:
             raise Exception("The token has expired.")
         except jwt.JWTClaimsError as e:
-            raise Exception("Token's claims are invalid: " + str(e) + "token: " + identity_token)
+            raise Exception("Token's claims are invalid: " + str(e))
         except Exception as e:
             raise Exception("An unexpected error occurred: " + str(e))
         

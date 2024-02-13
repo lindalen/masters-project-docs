@@ -4,6 +4,11 @@ from sqlalchemy.orm import sessionmaker
 from databases import Database
 import os
 
+from dotenv import load_dotenv
+
+# Load the .env file
+load_dotenv()
+
 DATABASE_URL = os.getenv("INTERNAL_DB_URL")
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
