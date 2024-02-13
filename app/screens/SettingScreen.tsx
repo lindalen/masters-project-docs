@@ -5,6 +5,8 @@ import { Theme } from "../theme";
 import DarkModeToggler from "../components/DarkModeToggler";
 import ModelSelector from "../components/ModelSelector";
 import AppIcon from "../components/AppIcon";
+import { Button } from "react-native";
+import SignOutButton from "../components/SignOutButton";
 
 const Box = createBox<Theme>();
 
@@ -21,6 +23,7 @@ const SettingScreen: React.FC<SettingScreenProps> = ({}) => {
         </Header>
         <Box flex={1} flexDirection="column" alignItems="center"  paddingVertical="l">
          <ModelSelector/>
+         <SignOutButton/>
         </Box>
         
     </Box>)

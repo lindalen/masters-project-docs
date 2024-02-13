@@ -12,7 +12,7 @@ const Box = createBox<Theme>();
 const Text = createText<Theme>();
 
 const LoginScreen = () => {
-    const setUser = useAppStore((state) => state.setUser)
+    const signIn = useAppStore((state) => state.signIn)
 
     return (
     <Box flex={1} flexDirection={"column"} justifyContent={"space-evenly"} backgroundColor="bgPrimary" alignItems={"center"}>
@@ -46,7 +46,7 @@ const LoginScreen = () => {
             const userData = await response.json();
 
             if (isUser(userData)) {
-                setUser(userData)
+                signIn(userData)
             } else {
                 throw new RequestError("Bad User Object Returned.")
             }

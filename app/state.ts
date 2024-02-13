@@ -5,7 +5,8 @@ import { Model, ChatMessage, Role, User } from "./types";
 
 interface AppState {
     user?: User;
-    setUser: (user: User) => void;
+    signIn: (user: User) => void;
+    signOut: () => void;
     darkMode: boolean;
     setDarkMode: (b: boolean) => void;
     model: Model;
@@ -18,7 +19,8 @@ interface AppState {
 export const useAppStore = create<AppState>()(
         persist(
             (set) => ({
-                setUser: (user) => set({ user: user }),
+                signIn: (user) => set({ user: user }),
+                signOut: () => set({ user: undefined }),
                 darkMode: true,
                 setDarkMode: (mode) => set({ darkMode: mode }),
                 model: Model.MISTRAL,
