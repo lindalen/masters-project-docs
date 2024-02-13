@@ -67,7 +67,7 @@ async def apple_auth(payload: AppleSignInPayload, db: Session = Depends(get_db))
         apple_user = await service.authenticate(payload.identityToken)
         return apple_user
     except Exception as e:
-        raise HTTPException(status_code=401, detail=str(e))
+        raise HTTPException(status_code=401, detail=str(e) + payload.identityToken)
 
 
 
